@@ -2,7 +2,7 @@ import {logger} from './logger';
 import {Block} from "./block"
 import {Transaction} from "./transaction"
 export class Blockchain {
-    private chain: Block[];
+    public readonly chain: Block[];
     private difficulty: number;
     private pendingTransactions: any[];
     private miningReward: number;
@@ -17,17 +17,17 @@ export class Blockchain {
     /**
      * @returns {Block}
      */
-    createGenesisBlock() {
-        return new Block(Date.parse('2017-01-01'), [], '0');
+    createGenesisBlock(): Block {
+        return new Block(Date.now(), [], '0');
     }
 
     /**
      * Returns the latest block on our chain. Useful when you want to create a
      * new Block and you need the hash of the previous Block.
      *
-     * @returns {Block[]}
+     * @returns {Block}
      */
-    getLatestBlock() {
+    getLatestBlock(): Block {
         return this.chain[this.chain.length - 1];
     }
 
@@ -71,7 +71,7 @@ export class Blockchain {
             throw new Error('Transaction must include from and to address');
         }
 
-        // Verify the transactiion
+        // Verify the transaction
         if (!transaction.isValid()) {
             throw new Error('Cannot add invalid transaction to chain');
         }

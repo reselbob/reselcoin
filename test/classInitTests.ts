@@ -7,7 +7,7 @@ import {Transaction} from "../src/transaction";
 describe('Class Init Tests', () => {
     before(async () => {
         // tslint:disable-next-line:no-console
-        logger.info('Class Init Tests');
+        logger.info('Starting Class Init Tests');
     });
 
     it('Can construct block', async () => {

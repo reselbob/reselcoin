@@ -1,10 +1,11 @@
 import crypto from 'crypto';
 import {logger} from './logger';
+import {Transaction} from "./transaction";
 
 export class Block {
     previousHash: string;
     private timestamp: any;
-    transactions: any;
+    transactions: Transaction[];
     private nonce: number;
     public hash: string;
     /**
@@ -22,12 +23,12 @@ export class Block {
     }
 
     /**
-     * Returns the SHA256 of this block (by processing all the data stored
+     * Returns the SHA256 hash value of this block (by processing all the data stored
      * inside this block)
      *
      * @returns {string}
      */
-    calculateHash() {
+    calculateHash(): string {
         return crypto
             .createHash('sha256')
             .update(
@@ -41,11 +42,12 @@ export class Block {
 
     /**
      * Starts the mining process on the block. It changes the 'nonce' until the hash
-     * of the block starts with enough zeros (= difficulty)
+     * of the block starts with enough zeros. The number of zeros equals the value of
+     * the parameter, difficulty.
      *
      * @param {number} difficulty
      */
-    mineBlock(difficulty) {
+    mineBlock(difficulty): void {
         while (
             this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')
             ) {
@@ -57,12 +59,14 @@ export class Block {
     }
 
     /**
-     * Validates all the transactions inside this block (signature + hash) and
-     * returns true if everything checks out. False if the block is invalid.
+     * Validates all the transactions inside this block (signature + hash).
+     * Returns true if all the transactions in the block are valid.
+     *
+     * Returns false if any transaction in the block is invalid.
      *
      * @returns {boolean}
      */
-    hasValidTransactions() {
+    hasValidTransactions(): boolean {
         for (const tx of this.transactions) {
             if (!tx.isValid()) {
                 return false;
