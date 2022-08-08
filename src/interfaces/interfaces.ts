@@ -1,9 +1,9 @@
 import {Transaction} from "../transaction";
-import {ec} from "elliptic";
-import KeyPair = ec.KeyPair;
+//import {ec} from "elliptic";
+//import KeyPair = ec.KeyPair;
 
 export interface SignedTransaction {
-    publicKeyPair: KeyPair;
+    publicKey: string;
     transaction: Transaction;
 }
 

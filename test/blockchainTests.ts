@@ -16,4 +16,10 @@ describe('Blockchain Tests', () => {
         expect(blockchain.chain.length).to.eq(1); // this is the genesis block
     });
 
+    it('Can add transaction to blockchain', async () => {
+        const blockchain = new Blockchain();
+        expect(blockchain.chain).to.be.an('array');
+        expect(blockchain.chain.length).to.eq(1); // this is the genesis block
+    });
+
 });

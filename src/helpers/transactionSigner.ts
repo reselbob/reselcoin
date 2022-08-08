@@ -4,17 +4,16 @@ import crypto from 'crypto';
 const EC = elliptic.ec;
 import {Transaction} from "../transaction";
 import {SignedTransaction, UnsignedTransaction} from "../interfaces/interfaces";
-import {ec} from "elliptic";
-import KeyPair = ec.KeyPair;
+//import KeyPair = ec.KeyPair;
 import {logger} from "../logger";
 
 export class TransactionSigner {
     private unsignedTransaction: UnsignedTransaction;
-    private userPrivateKeyPair: KeyPair;
+    private userPrivateKey: string;
 
-    constructor(utx: UnsignedTransaction, userPrivateKeyPair: KeyPair) {
+    constructor(utx: UnsignedTransaction, userPrivateKey: string) {
         this.unsignedTransaction = utx;
-        this.userPrivateKeyPair = userPrivateKeyPair;
+        this.userPrivateKey = userPrivateKey;
     }
 
     /**
@@ -30,11 +29,12 @@ export class TransactionSigner {
         const ec = new EC('secp256k1');
         const tx = new Transaction(this.unsignedTransaction.fromAddress,
             this.unsignedTransaction.toAddress,
-            this.unsignedTransaction.amount)
-        tx.signTransaction(ec.keyFromPrivate(this.userPrivateKeyPair))
+            this.unsignedTransaction.amount);
+        const key = ec.keyFromPrivate(this.userPrivateKey)
+        tx.signTransaction(key)
         const publicKeyPair = ec.keyFromPublic(this.unsignedTransaction.fromAddress, 'hex')
         logger.debug(publicKeyPair);
-        return {publicKeyPair, transaction: tx};
+        return {publicKey: publicKeyPair.getPublic('hex'), transaction: tx};
     }
 
     private calculateHash() {
