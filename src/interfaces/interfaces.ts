@@ -21,4 +21,4 @@ export interface IAgent {
 
 export interface IMiner extends IAgent{};
 export interface ITreasury extends IAgent{};
-export interface IFirstBuyer extends IAgent{};
+export interface IBuyer extends IAgent{};
