@@ -3,36 +3,36 @@ import crypto from 'crypto';
 //import {ec} from "elliptic";
 const EC = elliptic.ec;
 import {Transaction} from "../transaction";
-import {SignedTransaction, UnsignedTransaction} from "../interfaces/interfaces";
+import {ISignedTransaction, IUnsignedTransaction} from "../interfaces/interfaces";
 //import KeyPair = ec.KeyPair;
 import {logger} from "../logger";
 
 export class TransactionSigner {
-    private unsignedTransaction: UnsignedTransaction;
+    private IUnsignedTransaction: IUnsignedTransaction;
     private userPrivateKey: string;
 
-    constructor(utx: UnsignedTransaction, userPrivateKey: string) {
-        this.unsignedTransaction = utx;
+    constructor(utx: IUnsignedTransaction, userPrivateKey: string) {
+        this.IUnsignedTransaction = utx;
         this.userPrivateKey = userPrivateKey;
     }
 
     /**
      *
-     * @param unsignedTransaction , {
+     * @param IUnsignedTransaction , {
         toAddress: string,
         fromAddress: string,
         amount: number,
     }
      * @param privateKey
      */
-    public getSignedTransaction(): SignedTransaction {
+    public getSignedTransaction(): ISignedTransaction {
         const ec = new EC('secp256k1');
-        const tx = new Transaction(this.unsignedTransaction.fromAddress,
-            this.unsignedTransaction.toAddress,
-            this.unsignedTransaction.amount);
+        const tx = new Transaction(this.IUnsignedTransaction.fromAddress,
+            this.IUnsignedTransaction.toAddress,
+            this.IUnsignedTransaction.amount);
         const key = ec.keyFromPrivate(this.userPrivateKey)
         tx.signTransaction(key)
-        const publicKeyPair = ec.keyFromPublic(this.unsignedTransaction.fromAddress, 'hex')
+        const publicKeyPair = ec.keyFromPublic(this.IUnsignedTransaction.fromAddress, 'hex')
         logger.debug(publicKeyPair);
         return {publicKey: publicKeyPair.getPublic('hex'), transaction: tx};
     }
@@ -40,10 +40,10 @@ export class TransactionSigner {
     private calculateHash() {
         return crypto
             .createHash('sha256')
-            .update(this.unsignedTransaction.fromAddress +
-                this.unsignedTransaction.toAddress +
-                this.unsignedTransaction.amount +
-                this.unsignedTransaction.timestamp)
+            .update(this.IUnsignedTransaction.fromAddress +
+                this.IUnsignedTransaction.toAddress +
+                this.IUnsignedTransaction.amount +
+                this.IUnsignedTransaction.timestamp)
             .digest('hex');
     }
 
@@ -57,7 +57,7 @@ export class TransactionSigner {
     signTransaction(signingKey) {
         // You can only send a transaction from the wallet that is linked to your
         // key. So here we check if the fromAddress matches your publicKey
-        if (signingKey.getPublic('hex') !== this.unsignedTransaction.fromAddress) {
+        if (signingKey.getPublic('hex') !== this.IUnsignedTransaction.fromAddress) {
             throw new Error('You cannot sign transactions for other wallets!');
         }
 

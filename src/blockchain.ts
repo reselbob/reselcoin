@@ -1,17 +1,43 @@
 import {logger} from './logger';
 import {Block} from "./block"
 import {Transaction} from "./transaction"
+//import {TransactionSigner} from "./helpers/transactionSigner";
+import {IMiner, ITreasury} from "./interfaces/interfaces";
+import {Treasury} from "./agents/treasury";
+import {Miner} from "./agents/miner";
+
+
 export class Blockchain {
     public readonly chain: Block[];
-    private difficulty: number;
+    private readonly difficulty: number;
     private pendingTransactions: any[];
-    private miningReward: number;
+    private readonly miningReward: number;
+    private treasury: ITreasury
+    // @ts-ignore
+    private miner: IMiner;
     constructor() {
         logger.info('Constructing Blockchain')
         this.chain = [this.createGenesisBlock()];
         this.difficulty = 2;
         this.pendingTransactions = [];
         this.miningReward = 100;
+        this.treasury = Treasury.getTreasury();
+        this.miner = Miner.getMiner();
+    }
+
+    /**
+     * This method run an Initial Coin Offering against the blockchain adding coins to the
+     * blockchain's Treasury
+     * @numberOfCoinsToIssue amount, the number of coins issued during the ICO
+     */
+    executeIco(numberOfCoinsToIssue: number){
+        const tx = new Transaction(null, this.treasury.address , numberOfCoinsToIssue)
+        this.addTransaction(tx);
+        logger.info(`Mining transaction ${JSON.stringify(tx)}`)
+        this.minePendingTransactions(this.miner.address);
+        logger.info(`Mined transaction to ${tx.toAddress}`)
+        const treasuryAddress = Treasury.getTreasury().address
+        logger.info(`The  treasury at address ${treasuryAddress} now has  ${this.getBalanceOfAddress(treasuryAddress)} coins`)
     }
 
     /**
@@ -67,6 +93,13 @@ export class Blockchain {
      * @param {Transaction} transaction
      */
     addTransaction(transaction) {
+        if(transaction.toAddress === this.treasury.address) {
+            //This is a added by the internal treasury, thus it
+            // is trusted intrinsically
+            this.pendingTransactions.push(transaction);
+            return;
+        }
+
         if (!transaction.fromAddress || !transaction.toAddress) {
             throw new Error('Transaction must include from and to address');
         }

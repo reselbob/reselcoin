@@ -1,15 +1,24 @@
 import {Transaction} from "../transaction";
-//import {ec} from "elliptic";
-//import KeyPair = ec.KeyPair;
 
-export interface SignedTransaction {
+export interface ISignedTransaction {
     publicKey: string;
     transaction: Transaction;
 }
 
-export  interface UnsignedTransaction {
+export  interface IUnsignedTransaction {
     toAddress: string;
     fromAddress: string;
     amount: number;
     timestamp: number;
 }
+
+export interface IAgent {
+    friendlyName: string;
+    address: string;
+    publicKey: string;
+    privateKey: string;
+}
+
+export interface IMiner extends IAgent{};
+export interface ITreasury extends IAgent{};
+export interface IFirstBuyer extends IAgent{};

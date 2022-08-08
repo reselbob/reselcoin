@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {before, describe, it} from 'mocha';
 import {logger} from '../src/logger';
 import {Seeder} from "../src/helpers/seeder";
-import {UnsignedTransaction} from "../src/interfaces/interfaces";
+import {IUnsignedTransaction} from "../src/interfaces/interfaces";
 import {TransactionSigner} from "../src/helpers/transactionSigner";
 import * as elliptic from "elliptic";
 const EC = elliptic.ec;
@@ -21,7 +21,7 @@ describe('Signing Tests', () => {
         const userWalletAddress = userKeyPair.getPublic('hex');
 
         const seeder = new Seeder()
-        const utx: UnsignedTransaction = seeder.getRandomUnsignedTransaction()
+        const utx: IUnsignedTransaction = seeder.getRandomIUnsignedTransaction()
         utx.fromAddress = userWalletAddress;
         const signer = new TransactionSigner(utx, userPrivateKey);
         const signedTx = signer.getSignedTransaction();

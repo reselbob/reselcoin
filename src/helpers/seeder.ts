@@ -2,7 +2,7 @@ import {logger} from '../logger';
 import { faker } from '@faker-js/faker';
 import {Blockchain} from "../blockchain";
 import {Transaction} from "../transaction";
-import {UnsignedTransaction} from "../interfaces/interfaces";
+import {IUnsignedTransaction} from "../interfaces/interfaces";
 import {TransactionSigner} from "./transactionSigner";
 import * as elliptic from "elliptic";
 const EC = elliptic.ec;
@@ -24,7 +24,7 @@ export class Seeder {
         logger.info(`Seeding blockchain with ${numberOfBlocks} blocks`);
         const transactions = new Array<Transaction>();
         for(let i = 0; i<numberOfBlocks; i++){
-            const utx = this.getRandomUnsignedTransaction();
+            const utx = this.getRandomIUnsignedTransaction();
             utx.fromAddress = this.seederKeyPublicKey;
             const signer = new TransactionSigner(utx, this.seederKeyPrivateKey);
             const signedTx = signer.getSignedTransaction();
@@ -35,7 +35,7 @@ export class Seeder {
         return transactions;
 
     }
-    public getRandomUnsignedTransaction(): UnsignedTransaction {
+    public getRandomIUnsignedTransaction(): IUnsignedTransaction {
         return {toAddress: faker.internet.email(),
             fromAddress:faker.internet.email(),
             amount: parseInt(faker.random.numeric()),
