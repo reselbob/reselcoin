@@ -13,6 +13,10 @@ git clone https://github.com/reselbob/reselcoin.git
 ```
 
 ```bash
+cd reselcoin
+```
+
+```bash
 npm install
 ```
 
