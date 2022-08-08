@@ -29,7 +29,7 @@ describe('Blockchain Tests', () => {
         const icoAmount = 2000;
         blockchain.executeIco(icoAmount)
         const treasuryAmount = blockchain.getBalanceOfAddress(Treasury.getTreasury().address);
-        expect(treasuryAmount).to.eq(icoAmount); // this is the genesis block
+        expect(treasuryAmount).to.eq(icoAmount);
     });
 
 });
