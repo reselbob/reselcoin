@@ -10,7 +10,7 @@ export class Transaction {
     toAddress: any;
     amount: any;
     private timestamp: number;
-    private signature: any;
+    public signature: any;
     /**
      * @param {string} fromAddress
      * @param {string} toAddress

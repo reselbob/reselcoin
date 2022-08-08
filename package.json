@@ -19,20 +19,26 @@
   },
   "homepage": "https://github.com/reselbob/reselcoin#readme",
   "devDependencies": {
+    "@testdeck/mocha": "^0.2.0",
+    "@types/body-parser": "^1.19.2",
     "@types/chai": "^4.3.1",
     "@types/elliptic": "^6.4.14",
+    "@types/express": "^4.17.13",
     "@types/mocha": "^9.1.1",
     "@types/node": "^14.11.2",
     "chai": "^4.3.6",
-    "gts": "^3.1.0",
+    "gts": "^4.0.0",
     "mocha": "^10.0.0",
     "ts-node": "^10.2.0",
     "typescript": "^4.0.3"
   },
   "dependencies": {
-    "@testdeck/mocha": "^0.2.0",
+    "@faker-js/faker": "^7.3.0",
+    "body-parser": "^1.20.0",
     "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
     "elliptic": "^6.5.4",
+    "express": "^4.18.1",
     "tslib": "^2.4.0",
     "winston": "^3.8.1"
   }
