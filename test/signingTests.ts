@@ -24,8 +24,8 @@ describe('Signing Tests', () => {
         utx.fromAddress = userWalletAddress;
 
         const txToSign = new TransactionSigner(utx, userKeyPair);
-        txToSign.signTransaction(userKeyPair)
-        expect(utx).to.be.an('object');
+        const signature = txToSign.signTransaction(userKeyPair)
+        expect(signature).to.be.an('string');
     });
 
 
