@@ -27,6 +27,7 @@ describe('Blockchain Tests', () => {
     it('Can execute ICO', async () => {
         const blockchain = new Blockchain();
         const icoAmount = 2000;
+        logger.info(`Executing ICO for ${icoAmount}`);
         blockchain.executeIco(icoAmount)
         const treasuryAmount = blockchain.getBalanceOfAddress(Treasury.getTreasury().address);
         expect(treasuryAmount).to.eq(icoAmount);
